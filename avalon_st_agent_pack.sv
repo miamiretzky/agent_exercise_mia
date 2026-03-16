@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// File name    : agent_pack.sv
+// File name    : avalon_st_agent_pack.sv
 // Project name : 
 // Author       : 
 // Date Created : 
@@ -12,7 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-package agent_pack;
+package avalon_st_agent_pack;
 
     // parameters for driver slave
     localparam int unsigned LOW_RDY_PROBABILITY = 20;
@@ -23,4 +23,4 @@ package agent_pack;
     localparam int unsigned HIGH_VLD_PROBABILITY = 50;
 
 
-endpackage : agent_pack
+endpackage : avalon_st_agent_pack
