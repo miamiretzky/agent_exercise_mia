@@ -14,7 +14,6 @@
 `ifndef __AVALON_ST_DRIVER
 `define __AVALON_ST_DRIVER
 
-include avalon_st_if;
 import agent_pack::*;
 
 class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
