@@ -24,8 +24,11 @@ module tb ();
 
     // Interface declaration.
     avalon_st_if#(.DATA_WIDTH_IN_BYTES(DATA_WIDTH_IN_BYTES)) vif (.clk(clk));
+    avalon_st_driver slave_driver;
+    avalon_st_driver master_driver;
 
-    // TODO - Declare your classes here.
+    // Data to send 
+    byte data[$];
 
     //////////////////////////////////////////////////////////////////////////////
     // General processes.
@@ -59,7 +62,27 @@ module tb ();
     //////////////////////////////////////////////////////////////////////////////
     // Test logic.
     initial begin
+
+        // Construct the master and the slave
+    	master_driver = new(vif);
+        slave_driver  = new(vif, 1'b0)
     	
-    	// TODO - Insert TB logic here.
+        // Give the master random data to send
+        randomize_data(data);
+        master_driver.drive_master(data);
     end
+
+    task randomize_data(output byte data[$]);
+        int unsigned data_length_in_bytes;
+        byte random_byte;
+
+        // Randomize the length of the data
+        std::randomize(data_length_in_bytes);
+        
+        // Randomize each byte of the data
+        for (int i = 0; i < data_length_in_bytes; i++ )  begin
+            std::randomize(random_byte);
+            data.push_front(random_byte);
+        end
+    endtask
 endmodule
