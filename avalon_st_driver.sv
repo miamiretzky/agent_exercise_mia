@@ -19,16 +19,18 @@ import agent_pack::*;
 
 class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
 
-    /*-------------------------------------------------------------------------------
-    -- Members.
-    -------------------------------------------------------------------------------*/
 	virtual avalon_st_if #(DATA_WIDTH_IN_BYTES) vif;
 
     /*-------------------------------------------------------------------------------
     -- Constructor.
     -------------------------------------------------------------------------------*/
-    function new (/* Add arguments to the constructor here*/);
-	   // Constructor's logic.
+    function new (input virtual avalon_st_if #(DATA_WIDTH_IN_BYTES) vif, input bit is_slave = 1'b0);
+	   this.vif = vif;
+
+        // If the driver is slave start driving the rdy
+       if(is_slave) begin
+            drive_slave()
+       end;
     endfunction
 
     /*-------------------------------------------------------------------------------
