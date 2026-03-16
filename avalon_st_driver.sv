@@ -50,6 +50,8 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
             };
             vif.slave_cb.rdy <= rdy;
         end
+    endtask
+    
 endclass
 
 `endif // __AVALON_ST_DRIVER
