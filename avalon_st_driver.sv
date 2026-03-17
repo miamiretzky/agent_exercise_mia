@@ -66,7 +66,7 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
 
         while (word_num < words_amount) begin
 
-            // getting the current word
+            // Getting the current word
             curr_word = '0;
             for (int byte_in_word = 0; byte_in_word < DATA_WIDTH_IN_BYTES; byte_in_word++ )  begin
                 byte_index = byte_in_word * DATA_WIDTH_IN_BYTES + word_num;
@@ -74,19 +74,6 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
                     curr_word[byte_in_word*$bits(byte) +: $bits(byte)] = data[byte_index];
                 end
             end
-
-            // Changing the signals by the clock
-            @(vif.master_cb);
-
-            // Send HIGH sop with first word
-            vif.master_cb.sop <= (word_num == 0);
-
-            // Send empty and HIGH eop with last wor
-            vif.master_cb.eop   <= (word_num == words_amount);
-            vif.master_cb.empty <= (word_num == words_amount) ? empty : 0;
-
-            // Send the current word
-             vif.master_cb.data  <= curr_word;
 
             // Randomize the vld, when its HIGH it will stays HIGH until transaction
             if(!vld) begin
@@ -97,6 +84,21 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
                     };
                 };
             end
+
+            // Changing the signals by the clock
+            @(vif.master_cb);
+
+            // Send HIGH sop with first word
+            vif.master_cb.sop   <= (word_num == 0);
+
+            // Send empty and HIGH eop with last word
+            vif.master_cb.eop   <= (word_num == words_amount);
+            vif.master_cb.empty <= (word_num == words_amount) ? empty : 0;
+
+            // Send the current word
+            vif.master_cb.data  <= curr_word;
+
+            // Send the vld signal
             vif.master_cb.valid <= vld;
 
             // Move to next word if there was a transaction
@@ -105,6 +107,7 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
                 vld = 1'b0;
             end
         end
+        vif.master_cb.valid <= 1'b0;
     endtask
 endclass
 
