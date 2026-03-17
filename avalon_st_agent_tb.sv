@@ -68,7 +68,7 @@ module tb ();
 
         // Construct the master and the slave
     	master_driver = new(vif);
-        slave_driver  = new(vif, 1'b01;
+        slave_driver  = new(vif, 1'b01);
     	
         // Give the master random data to send
         randomize_data(data);
