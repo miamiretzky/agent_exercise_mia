@@ -14,7 +14,7 @@
 `ifndef __AVALON_ST_DRIVER
 `define __AVALON_ST_DRIVER
 
-import agent_pack::*;
+import avalon_st_agent_pack::*;
 
 class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
 
@@ -28,9 +28,12 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
 
         // If the driver is slave start driving the rdy
        if(is_slave) begin
-            drive_slave()
-       end;
+            fork
+                drive_slave();
+            join_none
+       end
     endfunction
+    
 
     /*-------------------------------------------------------------------------------
 	-- Functions and Tasks.
@@ -88,15 +91,17 @@ class avalon_st_driver #(int DATA_WIDTH_IN_BYTES = 4);
             // Randomize the vld, when its HIGH it will stays HIGH until transaction
             if(!vld) begin
                 std::randomize(vld) with {
-                    1'b0 := LOW_VLD_PROBABILITY, 
-                    1'b1 := HIGH_VLD_PROBABILITY
-                }
+                    vld dist{
+                        1'b0 := LOW_VLD_PROBABILITY, 
+                        1'b1 := HIGH_VLD_PROBABILITY
+                    };
+                };
             end
             vif.master_cb.valid <= vld;
 
             // Move to next word if there was a transaction
-            if (vif.master_cb.rdy && master_cb.valid) begin
-                word++;
+            if (vif.master_cb.rdy && vld) begin
+                word_num++;
                 vld = 1'b0;
             end
         end

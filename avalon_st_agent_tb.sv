@@ -4,8 +4,11 @@
 // Description : Top TB module for Agent Exercise.
 // -----------------------------------------------------------------------------
 
-// TODO - Add includes here!
+`include "avalon_st_agent_pack.sv"
+import avalon_st_agent_pack::*;
 `include "avalon_st_if.sv"
+`include "avalon_st_driver.sv"
+
 
 module tb ();
 
@@ -65,7 +68,7 @@ module tb ();
 
         // Construct the master and the slave
     	master_driver = new(vif);
-        slave_driver  = new(vif, 1'b0)
+        slave_driver  = new(vif, 1'b01;
     	
         // Give the master random data to send
         randomize_data(data);
@@ -77,7 +80,9 @@ module tb ();
         byte random_byte;
 
         // Randomize the length of the data
-        std::randomize(data_length_in_bytes);
+        std::randomize(data_length_in_bytes) with{
+            data_length_in_bytes inside {[0:1000]};
+        };
         
         // Randomize each byte of the data
         for (int i = 0; i < data_length_in_bytes; i++ )  begin
@@ -85,4 +90,5 @@ module tb ();
             data.push_front(random_byte);
         end
     endtask
+
 endmodule
